@@ -3,7 +3,7 @@ defmodule Part01Test do
   doctest Part01
 
   test "reads input file" do
-    assert Part01.read_input("part01_test_input.txt") == {:ok, "3   4\n4   3\n2   5\n1   3\n3   9\n3   3\n"}
+    assert Part01.read_input("test_input.txt") == {:ok, "3   4\n4   3\n2   5\n1   3\n3   9\n3   3\n"}
   end
 
   test "gets lines of file" do
@@ -20,6 +20,6 @@ defmodule Part01Test do
   end
 
   test "computes test file" do
-    assert Part01.compute("part01_test_input.txt") == 11
+    assert Part01.compute("test_input.txt") == 11
   end
 end
