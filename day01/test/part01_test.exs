@@ -3,7 +3,7 @@ defmodule Part01Test do
   doctest Part01
 
   test "reads input file" do
-    assert Part01.read_input("test_input.txt") == {:ok, "3   4\n4   3\n2   5\n1   3\n3   9\n3   3\n"}
+    assert Part01.read_input("test_input.txt") == "3   4\n4   3\n2   5\n1   3\n3   9\n3   3\n"
   end
 
   test "gets lines of file" do
@@ -11,7 +11,7 @@ defmodule Part01Test do
   end
 
   test "gets individual lists" do
-    assert Part01.create_lists(["3   4", "4   5"], []) == {[4, 3], [5, 4]}
+    assert Part01.create_lists(["3   4", "4   5"]) == {[4, 3], [5, 4]}
   end
 
   test "calculates distance between lists" do

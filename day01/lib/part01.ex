@@ -1,6 +1,9 @@
 defmodule Part01 do
   def read_input(file_name) do
-    File.read(file_name)
+    case File.read(file_name) do
+      {:ok, content} -> content
+      {:error, reason} -> raise "Failed to read file: #{reason}"
+    end
   end
 
   def get_lines(input) do
@@ -8,38 +11,19 @@ defmodule Part01 do
   end
 
   def make_int(string) do
-    { num, _ } = Integer.parse(string)
-    num
+    String.to_integer(string)
   end
 
-  def create_lists([], acc) do
-    acc
+  def create_lists(lines) do
+    Enum.reduce(lines, {[], []}, fn line, {left, right} ->
+      [l, r] = String.split(line, " ", trim: true)
+      {[make_int(l) | left], [make_int(r) | right]}
+    end)
   end
 
-  def create_lists(lines, []) do
-    [head | tail] = lines
-    [left, right] = String.split(head, " ", trim: true)
-    create_lists(tail, { [make_int(left)], [make_int(right)]})
-  end
-
-  def create_lists(lines, { left_list, right_list }) do
-    [head | tail] = lines
-    [left, right] = String.split(head, " ", trim: true)
-    create_lists(tail, { [make_int(left) | left_list ], [make_int(right) | right_list] })
-  end
-
-  def calc_distance(left, right, total \\ 0)
-
-  def calc_distance([], [], total) do
-    total
-  end
-
-  def calc_distance([], _right, total) do
-    total
-  end
-
-  def calc_distance(_left, [], total) do
-    total
+  def calc_distance(left, right) do
+    Enum.zip(left, right)
+    |> Enum.reduce(0, fn {l, r}, acc -> acc + abs(l - r) end)
   end
 
   def calc_distance(left, right, total) do
@@ -50,11 +34,14 @@ defmodule Part01 do
   end
 
   def compute(file_name) do
-    {:ok, content} = read_input(file_name)
-    lines = get_lines(content)
-    { left, right } = create_lists(lines, [])
-    sorted_left = Enum.sort(left)
-    sorted_right = Enum.sort(right)
-    calc_distance(sorted_left, sorted_right)
+    file_name
+    |> read_input()
+    |> get_lines()
+    |> create_lists()
+    |> then(fn {left, right} ->
+      left_sorted = Enum.sort(left)
+      right_sorted = Enum.sort(right)
+      calc_distance(left_sorted, right_sorted)
+    end)
   end
 end
